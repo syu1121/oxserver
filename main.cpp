@@ -9,6 +9,20 @@ using namespace std;
 
 
 
+struct MoveData
+{
+    int x;
+    int y;
+};
+
+struct GameState
+{
+    int board[3][3];
+    int currPlayer;
+    int winner;
+};
+
+
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
     // WinSock2.2 èâä˙âª
@@ -74,7 +88,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     SetDrawScreen(DX_SCREEN_BACK);
     SetAlwaysRunFlag(1);
 
-
+    
 
 
 
@@ -92,11 +106,31 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         // éÛêMèàóù
         for (int i = 0; i < socks.size(); i++)
         {
-            char buff[256];
-            int ret = recv(socks[i], (char*)&buff, sizeof(buff), 0);
+            MoveData recvData;
+            GameState gamestate;
+            
+            int ret = recv(socks[i], (char*)&recvData, sizeof(recvData), 0);
             if (ret > 0)
             {
-               
+                int x = ntohl(recvData.x);
+                int y = ntohl(recvData.y);
+
+                if (gamestate.board[y][x] == 0 && gamestate.winner = 0)
+                {
+                    board[y][x] = currPlayer;
+
+
+                    //currPlayer = (currPlayer == 1) ? 2 : 1;
+
+                    if (currPlayer == 1)
+                    {
+                        currPlayer = 2;
+                    }
+                    else
+                    {
+                        currPlayer = 1;
+                    }
+                }
                
             }
             else

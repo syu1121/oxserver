@@ -87,7 +87,6 @@ void Server::WaitClient()
 			clientCount++;
 		}
 	}
-	
 }
 
 void Server::Run()
@@ -140,14 +139,8 @@ void Server::Run()
 			}
 
 			return;
-		}
-
-		
+		}	
 	}
-
-
-
-
 }
 
 void Server::Cleanup()

@@ -72,7 +72,7 @@ void Server::WaitClient()
 
 	// 3クライアントからの接続要求を待つ
 	int clientCount = 0;
-	while (clientCount < 3)
+	while (clientCount < 2)
 	{
 		// いったんSOCKET型の変数に入れて…
 		SOCKET tmpSock = accept(listenSock, (SOCKADDR*)&clientSocketAddresses[clientCount], &addressLength);
@@ -100,8 +100,48 @@ void Server::Run()
 
 		if (ret <= 0)
 		{
-
+			cout << "Client " << endl;
+			return;
 		}
+
+		buff[ret] = '\0';
+
+		int x;
+		int y;
+		sscanf_s(buff, "%d %d", &x, &y);
+
+		if (!game.Place(x, y))
+		{
+			const char* msg = "Invalid move\n";
+			send(socks[playerIndex], msg, strlen(msg), 0);
+			continue;
+		}
+
+		char boardBuff[256];
+		sprintf_s(boardBuff, "%d%d%d\n%d%d%d\n%d%d%d\n",
+			game.GetCall(0, 0), game.GetCall(1, 0), game.GetCall(2, 0),
+			game.GetCall(0, 1), game.GetCall(1, 1), game.GetCall(2, 1),
+			game.GetCall(0, 2), game.GetCall(1, 2), game.GetCall(2, 2));
+
+		for (int i = 0; i < 2; i++)
+		{
+			send(socks[i], boardBuff, strlen(boardBuff), 0);
+		}
+
+		int winner = game.GetWinner();
+		if (winner != 0)
+		{
+			char winMsg[64];
+			sprintf_s(winMsg, "Winner: %d\n", winner);
+
+			for (int i = 0; i < 2; i++)
+			{
+				send(socks[i], winMsg, strlen(winMsg), 0);
+			}
+
+			return;
+		}
+
 		
 	}
 

@@ -69,7 +69,7 @@ void Game::CheckWinner()
 
     if (board[0][2] != 0 && board[0][2] == board[1][1] && board[1][1] == board[2][0])
     {
-        winner = board[0][0];
+        winner = board[0][2];
         return;
     }
 

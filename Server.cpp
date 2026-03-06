@@ -5,6 +5,12 @@ using namespace std;
 
 Server::Server()
 {
+	listenSock = INVALID_SOCKET;
+
+	for (int i = 0; i < 2; i++)
+	{
+		socks[i] = INVALID_SOCKET;
+	}
 }
 
 Server::~Server()
@@ -83,6 +89,7 @@ void Server::WaitClient()
 		else
 		{
 			// 接続要求受付たら、3クライアント用のソケット配列にセットする
+			cout << "Client connected: " << clientCount << endl;
 			socks[clientCount] = tmpSock;
 			clientCount++;
 		}
